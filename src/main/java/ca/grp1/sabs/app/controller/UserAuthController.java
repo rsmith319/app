@@ -63,7 +63,7 @@ public class UserAuthController {
             user.setEmail(updatedUser.getEmail());
             user.setPhoneNumber(updatedUser.getPhoneNumber());
 
-            // ⚠️ Don't blindly overwrite password in real apps
+           
             if (updatedUser.getPassword() != null) {
                 user.setPassword(updatedUser.getPassword());
             }

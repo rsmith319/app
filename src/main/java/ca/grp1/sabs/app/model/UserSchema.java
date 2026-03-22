@@ -70,10 +70,6 @@ public class UserSchema {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Appointment> appointmentsAsCustomer = new ArrayList<>();
 
-    // @JsonIgnore
-    // @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = false)
-    // private List<Appointment> appointmentsAsProvider = new ArrayList<>();
-
     public enum Role {
         CUSTOMER,
         SERVICE_PROVIDER,
