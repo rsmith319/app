@@ -15,7 +15,7 @@ public class UserAuthController {
 
     private final UserRepository userRepository;
 
-    // Constructor Injection (BEST PRACTICE)
+    // Constructor Injection 
     public UserAuthController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -45,7 +45,7 @@ public class UserAuthController {
         Optional<UserSchema> user = userRepository.findById(id);
 
         return user.map(ResponseEntity::ok)
-                   .orElseGet(() -> ResponseEntity.notFound().build());
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     // =========================
@@ -91,8 +91,9 @@ public class UserAuthController {
     // =========================
     // TEST ROUTE
     // =========================
-    @GetMapping("/hello")
+    @GetMapping("/")
     public String hello() {
         return "User API is running 🚀";
     }
+
 }

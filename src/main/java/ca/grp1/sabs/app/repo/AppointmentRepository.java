@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ca.grp1.sabs.app.model.Appointment;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, String> {
-    List<Appointment> findByCustomerId(String customerId);
+    List<Appointment> findByUserId(String userId);
     List<Appointment> findByProviderId(String providerId);
 }

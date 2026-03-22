@@ -32,14 +32,14 @@ public class AppointmentController {
 
     @PostMapping
     public ResponseEntity<?> create(@RequestBody Appointment appointment) {
-        Optional<UserSchema> customer = userRepository.findById(appointment.getCustomer().getId());
+        Optional<UserSchema> user = userRepository.findById(appointment.getUser().getId());
         Optional<ProviderSchema> provider = providerRepository.findById(appointment.getProvider().getId());
 
-        if (customer.isEmpty() || provider.isEmpty()) {
-            return ResponseEntity.badRequest().body("Invalid customer or provider");
+        if (user.isEmpty() || provider.isEmpty()) {
+            return ResponseEntity.badRequest().body("Invalid user or provider");
         }
 
-        appointment.setCustomer(customer.get());
+        appointment.setUser(user.get());
         appointment.setProvider(provider.get());
 
         return ResponseEntity.ok(appointmentRepository.save(appointment));

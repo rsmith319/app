@@ -54,9 +54,9 @@ public class Appointment {
     private LocalDateTime updatedAt;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "customer_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = false)
     @JsonIgnoreProperties({ "appointmentsAsCustomer", "appointmentsAsProvider" })
-    private UserSchema customer;
+    private UserSchema user;
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "provider_id", nullable = false)
@@ -78,13 +78,13 @@ public class Appointment {
             String notes,
             LocalDateTime appointmentDateTime,
             AppointmentStatus status,
-            UserSchema customer,
+            UserSchema user,
             ProviderSchema provider) {
         this.serviceName = serviceName;
         this.notes = notes;
         this.appointmentDateTime = appointmentDateTime;
         this.status = status;
-        this.customer = customer;
+        this.user = user;
         this.provider = provider;
     }
 
@@ -152,12 +152,12 @@ public class Appointment {
         return updatedAt;
     }
 
-    public UserSchema getCustomer() {
-        return customer;
+    public UserSchema getUser() {
+        return user;
     }
 
-    public void setCustomer(UserSchema customer) {
-        this.customer = customer;
+    public void setUser(UserSchema user) {
+        this.user = user;
     }
 
     public ProviderSchema getProvider() {

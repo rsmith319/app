@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <style>
+        :root {
+            --bg-1: #0f172a;
+            --bg-2: #111827;
+            --card: rgba(255, 255, 255, 0.1);
+            --border: rgba(255, 255, 255, 0.16);
+            --text: #f8fafc;
+            --muted: #cbd5e1;
+            --input: rgba(255, 255, 255, 0.08);
+            --input-focus: rgba(255, 255, 255, 0.14);
+            --accent: #6366f1;
+            --accent-hover: #4f46e5;
+            --danger-bg: rgba(239, 68, 68, 0.12);
+            --danger-text: #fecaca;
+            --success-bg: rgba(34, 197, 94, 0.14);
+            --success-text: #bbf7d0;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+            --radius: 24px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            color: var(--text);
+            background:
+                radial-gradient(circle at top left, rgba(99, 102, 241, 0.35), transparent 30%),
+                radial-gradient(circle at bottom right, rgba(59, 130, 246, 0.2), transparent 25%),
+                linear-gradient(135deg, var(--bg-1), var(--bg-2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .wrapper {
+            width: 100%;
+            max-width: 1120px;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: var(--shadow);
+        }
+
+        .brand-panel {
+            position: relative;
+            padding: 56px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            min-height: 720px;
+            background: linear-gradient(160deg, rgba(99, 102, 241, 0.18), rgba(15, 23, 42, 0.18));
+        }
+
+        .brand-panel::before,
+        .brand-panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(10px);
+            opacity: 0.5;
+        }
+
+        .brand-panel::before {
+            width: 220px;
+            height: 220px;
+            background: rgba(59, 130, 246, 0.22);
+            top: 40px;
+            right: 40px;
+        }
+
+        .brand-panel::after {
+            width: 180px;
+            height: 180px;
+            background: rgba(99, 102, 241, 0.24);
+            bottom: 60px;
+            left: 30px;
+        }
+
+        .logo {
+            position: relative;
+            z-index: 1;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            letter-spacing: 0.3px;
+        }
+
+        .logo-badge {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, #818cf8, #3b82f6);
+            box-shadow: 0 10px 30px rgba(99, 102, 241, 0.35);
+            font-size: 1rem;
+        }
+
+        .hero {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            max-width: 460px;
+        }
+
+        .hero-tag {
+            display: inline-flex;
+            align-items: center;
+            width: fit-content;
+            padding: 8px 14px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.3rem, 5vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -1.4px;
+        }
+
+        .hero p {
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.7;
+        }
+
+        .feature-list {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            gap: 14px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.06);
+        }
+
+        .feature-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            font-size: 1rem;
+        }
+
+        .feature-text small {
+            display: block;
+            color: var(--muted);
+            font-size: 0.82rem;
+            margin-top: 2px;
+        }
+
+        .form-panel {
+            padding: 56px 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(15, 23, 42, 0.42);
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .login-card h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            letter-spacing: -0.8px;
+        }
+
+        .subtitle {
+            color: var(--muted);
+            font-size: 0.98rem;
+            line-height: 1.6;
+            margin-bottom: 28px;
+        }
+
+        .alert {
+            padding: 14px 16px;
+            border-radius: 16px;
+            font-size: 0.94rem;
+            margin-bottom: 18px;
+            border: 1px solid transparent;
+        }
+
+        .alert.error {
+            background: var(--danger-bg);
+            color: var(--danger-text);
+            border-color: rgba(239, 68, 68, 0.18);
+        }
+
+        .alert.success {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border-color: rgba(34, 197, 94, 0.22);
+        }
+
+        form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .field-group {
+            display: grid;
+            gap: 8px;
+        }
+
+        label {
+            font-size: 0.94rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+
+        .input-wrap input {
+            width: 100%;
+            padding: 15px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: var(--input);
+            color: var(--text);
+            font-size: 0.98rem;
+            outline: none;
+            transition: 0.2s ease;
+        }
+
+        .input-wrap input::placeholder {
+            color: #94a3b8;
+        }
+
+        .input-wrap input:focus {
+            border-color: rgba(129, 140, 248, 0.7);
+            background: var(--input-focus);
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.18);
+        }
+
+        .form-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .checkbox {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .checkbox input {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent);
+        }
+
+        a {
+            color: #c7d2fe;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            border: none;
+            border-radius: 16px;
+            padding: 15px 18px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--accent), #3b82f6);
+            box-shadow: 0 14px 30px rgba(79, 70, 229, 0.28);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            background: linear-gradient(135deg, var(--accent-hover), #2563eb);
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 10px 0 4px;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .secondary-actions {
+            display: grid;
+            gap: 12px;
+        }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text);
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .footer-text {
+            margin-top: 22px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 960px) {
+            .wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-panel {
+                min-height: auto;
+                gap: 40px;
+                padding: 40px 32px 28px;
+            }
+
+            .form-panel {
+                padding: 36px 24px 40px;
+            }
+        }
+
+        @media (max-width: 560px) {
+            body {
+                padding: 14px;
+            }
+
+            .wrapper {
+                border-radius: 24px;
+            }
+
+            .brand-panel,
+            .form-panel {
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+
+            .login-card h2 {
+                font-size: 1.7rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="wrapper">
+    <section class="brand-panel">
+        <div class="logo">
+            <div class="logo-badge">✦</div>
+            <span>SABS Booking</span>
+        </div>
+
+        <div class="hero">
+            <span class="hero-tag">Appointment Booking Platform</span>
+            <h1>Welcome back.</h1>
+            <p>
+                Manage appointments, track schedules, and access your dashboard with a secure,
+                modern sign-in experience.
+            </p>
+        </div>
+
+        <div class="feature-list">
+            <div class="feature-item">
+                <div class="feature-icon">🗓</div>
+                <div class="feature-text">
+                    <strong>Smart scheduling</strong>
+                    <small>Organize bookings with clarity and speed.</small>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">🔒</div>
+                <div class="feature-text">
+                    <strong>Secure access</strong>
+                    <small>Protected sign-in for users and providers.</small>
+                </div>
+            </div>
+            <div class="feature-item">
+                <div class="feature-icon">⚡</div>
+                <div class="feature-text">
+                    <strong>Responsive experience</strong>
+                    <small>Looks clean on desktop, tablet, and mobile.</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="form-panel">
+        <div class="login-card">
+            <h2>Sign in</h2>
+            <p class="subtitle">Enter your account details to continue.</p>
+
+            <div th:if="${param.error}" class="alert error">
+                Invalid email or password. Please try again.
+            </div>
+
+            <div th:if="${param.logout}" class="alert success">
+                You have been logged out successfully.
+            </div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="field-group">
+                    <label for="username">Email</label>
+                    <div class="input-wrap">
+                        <input
+                                type="email"
+                                id="username"
+                                name="username"
+                                placeholder="you@example.com"
+                                required
+                                autocomplete="email"
+                        />
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <label for="password">Password</label>
+                    <div class="input-wrap">
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                                autocomplete="current-password"
+                        />
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <label class="checkbox" for="remember-me">
+                        <input type="checkbox" id="remember-me" name="remember-me" />
+                        <span>Remember me</span>
+                    </label>
+
+                    <a th:href="@{/forgot-password}">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Sign in</button>
+            </form>
+
+            <div class="divider">or</div>
+
+            <div class="secondary-actions">
+                <a class="btn-secondary" th:href="@{/register}">Create an account</a>
+            </div>
+
+            <p class="footer-text">
+                New here? <a th:href="@{/register}">Register now</a>
+            </p>
+        </div>
+    </section>
+</div>
+</body>
+</html>

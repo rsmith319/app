@@ -67,12 +67,12 @@ public class UserSchema {
     private LocalDateTime updatedAt;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = false)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = false)
     private List<Appointment> appointmentsAsCustomer = new ArrayList<>();
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = false)
-    private List<Appointment> appointmentsAsProvider = new ArrayList<>();
+    // @JsonIgnore
+    // @OneToMany(mappedBy = "provider", cascade = CascadeType.ALL, orphanRemoval = false)
+    // private List<Appointment> appointmentsAsProvider = new ArrayList<>();
 
     public enum Role {
         CUSTOMER,
@@ -190,12 +190,12 @@ public class UserSchema {
     public void setAppointmentsAsCustomer(List<Appointment> appointmentsAsCustomer) {
         this.appointmentsAsCustomer = appointmentsAsCustomer;
     }
-
-    public List<Appointment> getAppointmentsAsProvider() {
-        return appointmentsAsProvider;
-    }
-
-    public void setAppointmentsAsProvider(List<Appointment> appointmentsAsProvider) {
-        this.appointmentsAsProvider = appointmentsAsProvider;
-    }
 }
+//     public List<Appointment> getAppointmentsAsProvider() {
+//         return appointmentsAsProvider;
+//     }
+
+//     public void setAppointmentsAsProvider(List<Appointment> appointmentsAsProvider) {
+//         this.appointmentsAsProvider = appointmentsAsProvider;
+//     }
+// }
