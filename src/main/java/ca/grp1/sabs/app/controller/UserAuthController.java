@@ -4,13 +4,21 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import ca.grp1.sabs.app.model.UserSchema;
 import ca.grp1.sabs.app.repo.UserRepository;
+import jakarta.validation.constraints.Email;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/api/v1/users")
 public class UserAuthController {
 
     private final UserRepository userRepository;
@@ -38,25 +46,26 @@ public class UserAuthController {
     }
 
     // =========================
-    // GET USER BY ID
+    // GET USER BY EMAIL
     // =========================
-    @GetMapping("/{id}")
-    public ResponseEntity<UserSchema> getUserById(@PathVariable String id) {
-        Optional<UserSchema> user = userRepository.findById(id);
+    @GetMapping("/api/v1/u1/{email}")
+    public ResponseEntity<UserSchema> getUserByEmail(@PathVariable @Email String email) {
+        Optional<UserSchema> user = userRepository.findByEmail(email);
 
         return user.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
+        
+                .orElseGet(() -> ResponseEntity.status(401).body(null));
     }
 
     // =========================
     // UPDATE USER
     // =========================
-    @PutMapping("/{id}")
+    @PutMapping("/api/v1/users/{email}")
     public ResponseEntity<UserSchema> updateUser(
-            @PathVariable String id,
+            @PathVariable @Email String email,
             @RequestBody UserSchema updatedUser
     ) {
-        return userRepository.findById(id).map(user -> {
+        return userRepository.findByEmail(email).map(user -> {
 
             user.setFirstName(updatedUser.getFirstName());
             user.setLastName(updatedUser.getLastName());
@@ -77,14 +86,14 @@ public class UserAuthController {
     // =========================
     // DELETE USER
     // =========================
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+    @DeleteMapping("/api/v1/users/{email}")
+    public ResponseEntity<?> deleteUser(@PathVariable @Email String email) {
 
-        if (!userRepository.existsById(id)) {
+        if (!userRepository.existsById(email)) {
             return ResponseEntity.notFound().build();
         }
 
-        userRepository.deleteById(id);
+        userRepository.deleteById(email);
         return ResponseEntity.ok().build();
     }
 
